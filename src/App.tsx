@@ -4,8 +4,9 @@ import './App.css'
 
 import Home from './pages/home/Home';
 import Recipe from './pages/recipe/Recipe';
-import Create from './pages/create/create';
-import Search from './pages/search/search';
+import Create from './pages/create/Create';
+import Search from './pages/search/Search';
+import Whoops from './pages/whoops/Whoops';
 
 function App() {
 
@@ -24,6 +25,9 @@ function App() {
           </Route>
           <Route path="/create">
             <Create />
+          </Route>
+          <Route path="*">
+            <Whoops />
           </Route>
         </Switch>
       </BrowserRouter>

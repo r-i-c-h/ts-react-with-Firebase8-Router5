@@ -1,11 +1,5 @@
 import { useState, useEffect } from 'react';
 
-// interface FetchResponse<T> {
-//   data: null | T;
-//   isPending: boolean;
-//   error: null | string | Error;
-// }
-
 const useFetch = <T>(url: string) => {
   const [data, setData] = useState<T | null>(null);
   const [isPending, setIsPending] = useState(false);

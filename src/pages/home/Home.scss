@@ -1,4 +1,11 @@
 .home {
   max-width: 1200px;
-  margin: 60px auto;
+  margin: auto;
+  height: 100%;
+}
+.results {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2em;
+  height: 100%;
 }

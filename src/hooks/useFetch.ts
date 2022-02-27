@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { IFetchResponse } from '../ts/interfaces';
 
-const useFetch = <T>(url: string) => {
+const useFetch = <T>(url: string): IFetchResponse<T> => {
+  // const useFetch = <T>( url: string ): { data: T | null; isPending: Boolean; error: null | string | Error } => {
   const [data, setData] = useState<T | null>(null);
   const [isPending, setIsPending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<Error | string | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -23,9 +25,10 @@ const useFetch = <T>(url: string) => {
       } catch (err) {
         if (err instanceof Error) {
           if (err.name === 'AbortError') {
-            console.log('the fetch was aborted');
+            console.log('Data fetch was aborted');
+          } else {
+            setError(`PROBLEM! ${err.name}: ${err.message}`);
           }
-          setError('Could not fetch the data');
           setIsPending(false);
         }
       }

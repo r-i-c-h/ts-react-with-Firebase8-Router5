@@ -7,7 +7,7 @@ import "./RecipeList.scss";
 export default function RecipeList({ recipes }: { recipes: IRecipe[] }) {
   return (<div className="recipe-list">
     {
-      recipes.map((eachRecipe, indx) => {
+      recipes.map((eachRecipe) => {
         return <RecipeCard
           key={eachRecipe.id}
           recipe={eachRecipe}

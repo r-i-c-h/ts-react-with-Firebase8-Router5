@@ -1,12 +1,15 @@
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useRef, useState, useEffect } from "react";
 import useFetch from '../../hooks/useFetch';
 
 import LoaderAnimation from "../../components/LoaderAnimation";
 import "./Create.scss";
+import { useHistory } from "react-router-dom";
 
 const POST_URL = 'http://localhost:3000/recipes'
 
 export default function Create() {
+  const history = useHistory();
+  //*-----*//
   const [title, setTitle] = useState('');
   const [method, setMethod] = useState('');
   const [cookingTime, setCookingTime] = useState('0');
@@ -42,6 +45,13 @@ export default function Create() {
     setNewIngredient('')
     ingredientInput.current?.focus();
   }
+
+  // REDIRECT User after POST response:
+  useEffect(() => {
+    if (data) {
+      history.push('/')
+    }
+  }, [data])
 
   return (<>
     {loading && <LoaderAnimation />}

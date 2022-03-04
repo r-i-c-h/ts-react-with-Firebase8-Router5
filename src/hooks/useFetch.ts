@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react';
 import { IFetchResponse } from '../ts/interfaces';
 
-const useFetch = <T>(url: string, method = 'GET', postData?: RequestInit): IFetchResponse<T> => {
+const useFetch = <T>(url: string, method = 'GET'): IFetchResponse<T> => {
   // const useFetch = <T>( url: string ): { data: T | null; isPending: Boolean; error: null | string | Error } => {
   const [data, setData] = useState<T | null>(null);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<Error | string | null>(null);
   const [options, setOptions] = useState<RequestInit | null>(null);
 
-  const setPostOptions = (postData: unknown) => {
+  const postData = (postData: unknown) => {
     setOptions({
       method: 'POST',
-      headers: { 'content-type': 'application/json;' },
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
       body: JSON.stringify(postData)
     });
   };
@@ -21,28 +23,29 @@ const useFetch = <T>(url: string, method = 'GET', postData?: RequestInit): IFetc
 
     const fetchData = async (fetchOptions: RequestInit) => {
       setIsPending(true);
+
       try {
         const res = await fetch(url, { ...fetchOptions, signal: controller.signal });
+        const data = await res.json();
+
         if (!res.ok) {
           throw new Error(res.statusText);
         }
-        const data = await res.json();
 
         setIsPending(false);
         setData(data);
         setError(null);
       } catch (err) {
+        setIsPending(false);
         if (err instanceof Error) {
           if (err.name === 'AbortError') {
             console.log('Data fetch was aborted');
           } else {
             setError(`PROBLEM! ${err.name}: ${err.message}`);
           }
-          setIsPending(false);
         }
       }
     };
-
     if (method === 'GET') {
       fetchData({});
     }
@@ -56,7 +59,7 @@ const useFetch = <T>(url: string, method = 'GET', postData?: RequestInit): IFetc
     };
   }, [url, options, method]);
 
-  return { data, isPending, error, setPostOptions };
+  return { data, isPending, error, postData };
 };
 
 export default useFetch;

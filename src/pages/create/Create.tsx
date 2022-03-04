@@ -1,5 +1,4 @@
 import { FormEvent, useRef, useState } from "react";
-import { IRecipe } from "../../ts/interfaces";
 import useFetch from '../../hooks/useFetch';
 
 import LoaderAnimation from "../../components/LoaderAnimation";
@@ -11,26 +10,26 @@ export default function Create() {
   const [title, setTitle] = useState('');
   const [method, setMethod] = useState('');
   const [cookingTime, setCookingTime] = useState('0');
-
-  const [newIngredient, setNewIngredient] = useState('')
+  //*-----*//
   const [ingredients, setIngredients] = useState<string[]>([]);
+  const [newIngredient, setNewIngredient] = useState('')
   const ingredientInput = useRef<HTMLInputElement>(null);
-
+  //*-----*//
   const [loading, setLoading] = useState(false);
   const [localError, setLocalError] = useState<string | Error | null | undefined>(null);
+  //*-----*//
 
-  const { setPostOptions, data, error } = useFetch(POST_URL, "POST");
+  const { postData, data, isPending, error } = useFetch(POST_URL, "POST");
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleFormSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (parseInt(cookingTime) <= 0 || ingredients.length === 0) {
       setLocalError('Please make sure you have included ALL information')
       return;
     }
-    const handlePostOptions = setPostOptions ? setPostOptions : () => null
-    handlePostOptions(
-      { title, method, cookingTime: cookingTime.concat(' minutes'), ingredients }
-    )
+
+    const setPost = postData ? postData : () => null
+    setPost({ title, method, ingredients, cookingTime: cookingTime.concat(' minutes') })
     if (error) { setLocalError(error); return }
   }
 
@@ -50,7 +49,7 @@ export default function Create() {
     <div className="create">
       <h2 className="page-title">Add a New Recipe to the list.</h2>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleFormSubmit}>
         <label>
           <span>Recipe Title:</span>
           <input type="text"

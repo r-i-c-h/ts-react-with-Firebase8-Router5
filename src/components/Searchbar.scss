@@ -1,9 +1,23 @@
 .searchbar {
   form {
+    position: relative;
+    // right: -1em;
     display: flex;
     align-items: center;
   }
   input {
-    margin-left: 0.48em;
+    margin-left: 0.25em;
   }
+  .btn {
+    background: transparent;
+    border: none;
+    position: absolute;
+    right: 0;
+  }
+}
+
+#magnifying-glass {
+  height: 2em;
+  width: 2em;
+  stroke: #e2e2e2;
 }

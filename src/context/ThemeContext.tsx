@@ -2,14 +2,14 @@ import { createContext, useReducer } from "react";
 
 interface IThemeState {
   color: string;
-  changeColor?: (color: string) => void;
+  changeColor: (color: string) => void;
 }
 interface IThemeActions {
   type: string;
   payload: string;
 }
 
-const initialState: IThemeState = { color: '#58249c' };
+const initialState: IThemeState = { color: '#58249c', changeColor: () => { null } };
 
 export const ThemeContext = createContext<IThemeState>(initialState)
 

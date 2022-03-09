@@ -13,6 +13,9 @@
   cursor: pointer;
   margin-left: 15px;
   border-radius: 50%;
+  &.dark {
+    outline: 1px solid #aaa;
+  }
 }
 .mode-toggle {
   margin-right: auto;
@@ -20,5 +23,9 @@
     width: 1.5rem;
     height: 1.5rem;
     cursor: pointer;
+    filter: invert(20%);
+    &.dark {
+      filter: invert(100%);
+    }
   }
 }

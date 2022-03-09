@@ -40,4 +40,13 @@
     margin: 20px 0;
     line-height: 1.5em;
   }
+  &.dark {
+    background: #555;
+    color: #e4e4e4;
+    & p,
+    & h3,
+    & div {
+      color: #e4e4e4;
+    }
+  }
 }

@@ -17,10 +17,10 @@ export default function ThemeSelector() {
 
       <div className="mode-toggle">
         <img
+          className={mode}
           src={modeIcon}
           alt="Light\Dark Color Theme Switch Icon"
           onClick={toggleLightDarkThemes}
-          style={{ filter: mode === "dark" ? 'invert(100%)' : 'invert(20%)' }}
         />
       </div>
 
@@ -30,6 +30,7 @@ export default function ThemeSelector() {
             key={color}
             onClick={() => changeColor(color)}
             style={{ background: color }}
+            className={mode}
           />
         ))}
       </div>

@@ -4,15 +4,17 @@ import useFetch from "../../hooks/useFetch";
 
 import "./Recipe.scss";
 import LoaderAnimation from "../../components/LoaderAnimation";
-import RecipeList from "../../components/RecipeList";
+import { useTheme } from "../../hooks/useTheme";
 
 const Recipe = () => {
+  const { mode } = useTheme();
+
   const { id } = useParams<{ id: string }>();
   const url = 'http://localhost:3000/recipes/' + id
   const { data: recipe, isPending, error } = useFetch<IRecipe>(url);
 
   return (
-    <div className="recipe">
+    <div className={`recipe ${mode}`}>
       {error && <p className="error">{error}</p>}
       {isPending && <LoaderAnimation />}
       {recipe && (

@@ -1,5 +1,5 @@
 import { IRecipe } from "../../ts/interfaces";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 
 import "./Recipe.scss";
@@ -8,10 +8,16 @@ import { useTheme } from "../../hooks/useTheme";
 
 const Recipe = () => {
   const { mode } = useTheme();
+  const history = useHistory(); // For URL change after delete
 
   const { id } = useParams<{ id: string }>();
   const url = 'http://localhost:3000/recipes/' + id
   const { data: recipe, isPending, error } = useFetch<IRecipe>(url);
+
+  const handleDelete = async () => {
+    await window.fetch(url, { method: "DELETE" });
+    history.push('/');
+  }
 
   return (
     <div className={`recipe ${mode}`}>
@@ -25,6 +31,7 @@ const Recipe = () => {
             {recipe.ingredients.map(ing => <li key={ing}>{ing}</li>)}
           </ul>
           <p className="method">{recipe.method}</p>
+          <button onClick={handleDelete}>Delete Recipe</button>
         </>
       )}
     </div>)

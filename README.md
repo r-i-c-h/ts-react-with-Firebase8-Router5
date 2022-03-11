@@ -6,7 +6,7 @@
 * React
 * React Router (v5)
 * SASS/SCSS
-* & local dummy data served via `json-db`
+* Google Firebase Firestore Database
 
 ## Future Revisions:
 * Complete UPDATE form/functionality (not hard, just a PITA for a demo)

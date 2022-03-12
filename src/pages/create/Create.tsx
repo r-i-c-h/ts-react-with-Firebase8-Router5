@@ -57,7 +57,7 @@ export default function Create() {
     {isPending && <LoaderAnimation />}
     {error && <h4 className="error">{handleError(error)}</h4>}
 
-    <div className={`recipe ${mode}`}>
+    <div className={`create ${mode}`}>
       <h2 className="page-title">Add a New Recipe to the list.</h2>
 
       <form onSubmit={handleFormSubmit}>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { handleError } from "../../ts/TS-ErrorHandler.js";
 import { projectFirestore } from '../../firebase/config.js';
 
 import { IRecipe } from "../../ts/interfaces";
@@ -11,15 +12,15 @@ import RecipeList from "../../components/RecipeList";
 export default function Home() {
   const [data, setData] = useState<null | IRecipe[]>(null);
   const [isPending, setIsPending] = useState(false);
-  const [error, setError] = useState<Error | boolean | string>(false);
+  const [error, setError] = useState<unknown>(false);
 
   useEffect(() => {
     setIsPending(true);
 
     projectFirestore.collection('recipes').get().then((snapshot) => {
       if (snapshot.empty) {
-        setError('No Recipes Found in Database!')
         setIsPending(false);
+        setError('No Recipes Found in Database!')
       } else {
         const results: IRecipe[] = [];
 
@@ -32,8 +33,8 @@ export default function Home() {
         setIsPending(false);
       }
     }
-    ).catch(err => {
-      setError(err.message)
+    ).catch((err) => {
+      setError(err)
       setIsPending(false);
     })
       .finally(() => setIsPending(false));
@@ -42,7 +43,7 @@ export default function Home() {
   return (
     <div className="home">
       <h1 className="page-title">Home</h1>
-      {error && <p className="error">{error}</p>}
+      {error && <p className="error">{handleError(error)}</p>}
       {isPending && <LoaderAnimation />}
       {data && <RecipeList recipes={data} />}
     </div>

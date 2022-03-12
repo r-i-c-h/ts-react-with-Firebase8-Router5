@@ -49,4 +49,13 @@
       color: #e4e4e4;
     }
   }
+  & .delete {
+    position: absolute;
+    width: 1.6em;
+    height: 1.6em;
+    top: 0.96em;
+    right: 0.48em;
+    cursor: pointer;
+    filter: invert(60%);
+  }
 }

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { IRecipe } from "../../ts/interfaces";
-
-import { useHistory, useParams } from "react-router-dom";
 
 import { projectFirestore } from "../../firebase/config";
 
@@ -12,10 +11,8 @@ import LoaderAnimation from "../../components/LoaderAnimation";
 
 import "./Recipe.scss";
 
-
 const Recipe = () => {
   const { mode } = useTheme();
-  // const history = useHistory(); // For URL change after delete
 
   // useState<QueryDocumentSnapshot<DocumentData>[]>([])
   const [recipe, setRecipe] = useState<null | IRecipe>(null);
@@ -23,12 +20,6 @@ const Recipe = () => {
   const [error, setError] = useState<unknown>(null);
 
   const { id } = useParams<{ id: string }>();
-
-  //! TODO: Put back a handler for DELETING recipes
-  /* const handleDelete = async () => {
-    await window.fetch(url, { method: "DELETE" });
-    history.push('/');
-  } */
 
   useEffect(() => {
     setIsPending(true);
@@ -62,10 +53,10 @@ const Recipe = () => {
             {recipe.ingredients.map(ing => <li key={ing}>{ing}</li>)}
           </ul>
           <p className="method">{recipe.method}</p>
-          {/* <button onClick={handleDelete}>Delete Recipe</button> */}
         </>
       )}
-    </div>)
+    </div>
+  )
 }
 
 export default Recipe;

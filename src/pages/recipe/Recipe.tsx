@@ -12,33 +12,36 @@ import LoaderAnimation from "../../components/LoaderAnimation";
 import "./Recipe.scss";
 
 const Recipe = () => {
-  const { mode } = useTheme();
 
-  // useState<QueryDocumentSnapshot<DocumentData>[]>([])
   const [recipe, setRecipe] = useState<null | IRecipe>(null);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<unknown>(null);
 
   const { id } = useParams<{ id: string }>();
+  const { mode } = useTheme();
 
   useEffect(() => {
     setIsPending(true);
-    projectFirestore.collection('recipes').doc(id).get()
-      .then((doc) => {
-        if (doc.exists) {
-          setIsPending(false)
-          const { method, title, ingredients, cookingTime } = doc.data() as IRecipe
-          setRecipe({ id, method, title, ingredients, cookingTime })
-        } else {
-          setError(`Sorry, but there's a problem with Recipe ID:${id} in my Database!`)
-        }
-        setIsPending(false)
-      })
-      .catch(err => {
+
+    const cleanupFunction = projectFirestore.collection('recipes').doc(id).onSnapshot((doc) => {
+      if (doc.exists) {
         setIsPending(false);
-        setError(err);
-      })
-  }, []);
+        const { method, title, ingredients, cookingTime } = doc.data() as IRecipe
+        setRecipe({ id, method, title, ingredients, cookingTime })
+      } else {
+        setIsPending(false);
+        setError(`Sorry, but there's a problem with Recipe ID:${id} in my Database!`)
+      }
+    },
+      (err) => {
+        setError(err)
+        setIsPending(false);
+      }
+    )
+
+    return () => cleanupFunction()
+
+  }, [id]);
 
   return (
     <div className={`recipe ${mode}`}>

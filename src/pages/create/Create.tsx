@@ -1,14 +1,16 @@
 import { FormEvent, useRef, useState, useEffect } from "react";
-import useFetch from '../../hooks/useFetch';
+import { useHistory } from "react-router-dom";
+import { projectFirestore } from '../../firebase/config.js';
+import { handleError } from "../../ts/TS-ErrorHandler.js";
 
 import LoaderAnimation from "../../components/LoaderAnimation";
-import "./Create.scss";
-import { useHistory } from "react-router-dom";
 
-const POST_URL = 'http://localhost:3000/recipes'
+import "./Create.scss";
+import { useTheme } from "../../hooks/useTheme";
 
 export default function Create() {
-  const history = useHistory();
+  const { mode } = useTheme();
+  const history = useHistory(); // for changing URL on POST success
   //*-----*//
   const [title, setTitle] = useState('');
   const [method, setMethod] = useState('');
@@ -18,22 +20,27 @@ export default function Create() {
   const [newIngredient, setNewIngredient] = useState('')
   const ingredientInput = useRef<HTMLInputElement>(null);
   //*-----*//
-  const [loading, setLoading] = useState(false);
-  const [localError, setLocalError] = useState<string | Error | null | undefined>(null);
+  const [isPending, setIsPending] = useState(false);
+  const [error, setError] = useState<unknown>(null);
   //*-----*//
 
-  const { postData, data, isPending, error } = useFetch(POST_URL, "POST");
-
-  const handleFormSubmit = (e: FormEvent) => {
+  const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (parseInt(cookingTime) <= 0 || ingredients.length === 0) {
-      setLocalError('Please make sure you have included ALL information')
+    if (ingredients.length === 0) {
+      setError('Please make sure you have included ALL information, including ingredients!')
       return;
     }
 
-    const setPost = postData ? postData : () => null
-    setPost({ title, method, ingredients, cookingTime: cookingTime.concat(' minutes') })
-    if (error) { setLocalError(error); return }
+    const newDoc = { title, method, ingredients, cookingTime: cookingTime.concat(' minutes') }
+    setIsPending(true)
+    try {
+      await projectFirestore.collection('recipes').add(newDoc)
+      setIsPending(false);
+      history.push('/')
+    } catch (err) {
+      setIsPending(false);
+      setError(err)
+    }
   }
 
   const handleAddNewIngredient = (e: FormEvent) => {
@@ -46,17 +53,11 @@ export default function Create() {
     ingredientInput.current?.focus();
   }
 
-  // REDIRECT User after POST response:
-  useEffect(() => {
-    if (data) {
-      history.push('/')
-    }
-  }, [data])
-
   return (<>
-    {loading && <LoaderAnimation />}
-    {localError && <h4 className="error">{localError}</h4>}
-    <div className="create">
+    {isPending && <LoaderAnimation />}
+    {error && <h4 className="error">{handleError(error)}</h4>}
+
+    <div className={`recipe ${mode}`}>
       <h2 className="page-title">Add a New Recipe to the list.</h2>
 
       <form onSubmit={handleFormSubmit}>
@@ -103,7 +104,7 @@ export default function Create() {
           />
         </label>
 
-        <button className="btn ">Submit</button>
+        <button className="btn">Submit</button>
       </form>
     </div>
   </>)

@@ -17,7 +17,7 @@ export default function Home() {
   useEffect(() => {
     setIsPending(true);
 
-    projectFirestore.collection('recipes').get().then((snapshot) => {
+    const cleanupFunction = projectFirestore.collection('recipes').onSnapshot((snapshot) => {
       if (snapshot.empty) {
         setIsPending(false);
         setError('No Recipes Found in Database!')
@@ -32,12 +32,15 @@ export default function Home() {
         setData(results)
         setIsPending(false);
       }
-    }
-    ).catch((err) => {
-      setError(err)
-      setIsPending(false);
-    })
-      .finally(() => setIsPending(false));
+    },
+      (err) => {
+        setError(err)
+        setIsPending(false);
+      }
+    )
+
+    return () => cleanupFunction()
+
   }, []);
 
   return (

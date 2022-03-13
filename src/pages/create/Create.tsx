@@ -89,6 +89,7 @@ export default function Create() {
           <textarea
             onChange={e => { setMethod(e.target.value) }}
             value={method}
+            rows={5}
             required
           />
         </label>

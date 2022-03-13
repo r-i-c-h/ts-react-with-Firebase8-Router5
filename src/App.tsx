@@ -8,6 +8,7 @@ import ThemeSelector from './components/ThemeSelector';
 import Home from './pages/home/Home';
 import Recipe from './pages/recipe/Recipe';
 import Create from './pages/create/Create';
+import Edit from './pages/edit/Edit';
 import Search from './pages/search/Search';
 import Whoops from './pages/whoops/Whoops';
 import { useTheme } from './hooks/useTheme';
@@ -26,6 +27,9 @@ function App() {
           </Route>
           <Route path="/recipes/:id">
             <Recipe />
+          </Route>
+          <Route path="/edit/:id">
+            <Edit />
           </Route>
           <Route path="/search">
             <Search />

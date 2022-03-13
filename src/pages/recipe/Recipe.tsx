@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { IRecipe } from "../../ts/interfaces";
 
 import { projectFirestore } from "../../firebase/config";
@@ -17,8 +17,13 @@ const Recipe = () => {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<unknown>(null);
 
+  const history = useHistory(); // for changing URL on edit
   const { id } = useParams<{ id: string }>();
   const { mode } = useTheme();
+
+  const handleClick = () => {
+    history.push(`/edit/${id}`)
+  }
 
   useEffect(() => {
     setIsPending(true);
@@ -56,6 +61,9 @@ const Recipe = () => {
             {recipe.ingredients.map(ing => <li key={ing}>{ing}</li>)}
           </ul>
           <p className="method">{recipe.method}</p>
+          <div>
+            <button onClick={handleClick}>Edit This Recipe</button>
+          </div>
         </>
       )}
     </div>

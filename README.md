@@ -6,8 +6,7 @@
 * React
 * React Router (v5)
 * SASS/SCSS
-* Google Firebase Firestore Database
+* Google Firebase Firestore Database v8.5
 
 ## Future Revisions:
-* Complete UPDATE form/functionality (not hard, just a PITA for a demo)
 * Complete Mobile Responsive Layout

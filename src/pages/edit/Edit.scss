@@ -1,0 +1,53 @@
+.create {
+  color: #555;
+  max-width: 600px;
+  margin: 60px auto;
+  & p {
+    margin-top: 10px;
+    font-size: 0.8em;
+  }
+  &.dark p {
+    color: #e4e4e4;
+  }
+  & label span {
+    display: block;
+    margin: 30px 0 10px;
+  }
+  &.dark label span {
+    color: #e4e4e4;
+  }
+  & button {
+    display: block;
+    font-size: 1em;
+    color: #fff;
+    padding: 8px 20px;
+    border: 0;
+    border-radius: 4px;
+    background-color: #58249c;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 20px auto;
+    &.mini-btn {
+      display: inline;
+      width: 1em;
+      height: 1em;
+      margin-left: 0.55em;
+      margin-right: 0.1em;
+      // padding: 0 0.05em;
+      padding: 0em;
+      border-radius: 50%;
+      // line-height: 0;
+    }
+  }
+  &.dark button {
+    outline: 1px solid #fff;
+  }
+}
+.ingredients {
+  display: flex;
+  align-items: center;
+
+  & button {
+    margin: 0 0 0 10px;
+  }
+}
